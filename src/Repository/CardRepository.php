@@ -14,37 +14,20 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CardRepository extends ServiceEntityRepository
 {
+    const LIMIT_CARDS_TO_DISPLAY = 20;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Card::class);
     }
 
-    // /**
-    //  * @return Card[] Returns an array of Card objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findLatestCreatedCards()
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+            ->addOrderBy("c.id",  'DESC')
+            ->setMaxResults(self::LIMIT_CARDS_TO_DISPLAY)
             ->getQuery()
             ->getResult()
-        ;
+            ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Card
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
