@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Card;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,6 +23,9 @@ class CardRepository extends ServiceEntityRepository
         parent::__construct($registry, Card::class);
     }
 
+    /**
+     * @return mixed
+     */
     public function findLatestCreatedCards()
     {
         return $this->createQueryBuilder('c')
@@ -28,6 +33,26 @@ class CardRepository extends ServiceEntityRepository
             ->setMaxResults(self::LIMIT_CARDS_TO_DISPLAY)
             ->getQuery()
             ->getResult()
+            ;
+    }
+
+    /**
+     * @param int $codeCenter
+     * @param string $type
+     * @return int|null
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
+    public function findMaxCodeCardByCenterAndType(int $codeCenter, string $type): ?int
+    {
+        return $this->createQueryBuilder('c')
+            ->select('MAX(c.codeCard)')
+            ->where('c.codeCenter = :codeCenter')
+            ->setParameter('codeCenter', $codeCenter)
+            ->andWhere('c.type = :type')
+            ->setParameter('type', $type)
+            ->getQuery()
+            ->getSingleScalarResult()
             ;
     }
 }

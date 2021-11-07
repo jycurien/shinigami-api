@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 
+use App\Handler\Card\CardHandler;
 use App\Repository\CardRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,5 +22,17 @@ class CardController extends AbstractController
     {
         $cards = $cardRepository->findLatestCreatedCards();
         return $this->json($cards, Response::HTTP_OK, [], ['groups' => 'show_cards']);
+    }
+
+    /**
+     * @Route("/create-numeric-card/{codeCenter<\d+>}")
+     * @param $codeCenter
+     * @param CardHandler $cardHandler
+     * @return JsonResponse
+     */
+    public function createNumericCard($codeCenter, CardHandler $cardHandler)
+    {
+        $card = $cardHandler->handle($codeCenter);
+        return $this->json($card);
     }
 }

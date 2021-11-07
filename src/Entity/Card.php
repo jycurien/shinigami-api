@@ -15,6 +15,7 @@ class Card
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"show_cards"})
      */
     private $id;
 
