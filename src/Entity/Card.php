@@ -47,11 +47,11 @@ class Card
      * @ORM\Column(type="integer")
      * @Groups({"show_cards"})
      */
-    private $checksum;
+    private $checkSum;
 
     /**
      * @ORM\ManyToOne(targetEntity=CardOrder::class, inversedBy="cards")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $cardOrder;
 
@@ -108,14 +108,14 @@ class Card
         return $this;
     }
 
-    public function getChecksum(): ?int
+    public function getCheckSum(): ?int
     {
-        return $this->checksum;
+        return $this->checkSum;
     }
 
-    public function setChecksum(int $checksum): self
+    public function setChecksum(int $checkSum): self
     {
-        $this->checksum = $checksum;
+        $this->checkSum = $checkSum;
 
         return $this;
     }

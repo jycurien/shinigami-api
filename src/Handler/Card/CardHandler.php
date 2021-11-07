@@ -33,18 +33,18 @@ class CardHandler
         $this->cardFactory = $cardFactory;
     }
 
-    public function handle($codeCenter): Card
+    public function handle($centerCode): Card
     {
         // We check the max number card for the given center
-        $codeCardMax = $this->cardRepository->findMaxCodeCardByCenterAndType($codeCenter, 'numeric');
+        $maxCardCode = $this->cardRepository->findMaxCardCodeByCenterAndType($centerCode, 'numeric');
 
-        if($codeCardMax) {
-            $newCodeCard = $codeCardMax+1;
+        if($maxCardCode) {
+            $newCardCode = $maxCardCode+1;
         } else {
-            $newCodeCard = self::NUMERIC_CODE_CARD_MIN;
+            $newCardCode = self::NUMERIC_CODE_CARD_MIN;
         }
 
-        $card = $this->cardFactory->createNumericCard($codeCenter, $newCodeCard);
+        $card = $this->cardFactory->createNumericCard($centerCode, $newCardCode);
 
         $this->entityManager->persist($card);
         $this->entityManager->flush();

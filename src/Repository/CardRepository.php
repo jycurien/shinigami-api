@@ -37,18 +37,18 @@ class CardRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param int $codeCenter
+     * @param int $centerCode
      * @param string $type
      * @return int|null
      * @throws NoResultException
      * @throws NonUniqueResultException
      */
-    public function findMaxCodeCardByCenterAndType(int $codeCenter, string $type): ?int
+    public function findMaxCardCodeByCenterAndType(int $centerCode, string $type): ?int
     {
         return $this->createQueryBuilder('c')
-            ->select('MAX(c.codeCard)')
-            ->where('c.codeCenter = :codeCenter')
-            ->setParameter('codeCenter', $codeCenter)
+            ->select('MAX(c.cardCode)')
+            ->where('c.centerCode = :centerCode')
+            ->setParameter('centerCode', $centerCode)
             ->andWhere('c.type = :type')
             ->setParameter('type', $type)
             ->getQuery()

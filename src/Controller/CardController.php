@@ -25,14 +25,14 @@ class CardController extends AbstractController
     }
 
     /**
-     * @Route("/create-numeric-card/{codeCenter<\d+>}")
-     * @param $codeCenter
+     * @Route("/create-numeric-card/{centerCode<\d+>}")
+     * @param string $centerCode
      * @param CardHandler $cardHandler
      * @return JsonResponse
      */
-    public function createNumericCard($codeCenter, CardHandler $cardHandler)
+    public function createNumericCard(string $centerCode, CardHandler $cardHandler)
     {
-        $card = $cardHandler->handle($codeCenter);
-        return $this->json($card);
+        $card = $cardHandler->handle($centerCode);
+        return $this->json($card, Response::HTTP_OK, [], ['groups' => 'show_cards']);
     }
 }
