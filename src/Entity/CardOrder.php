@@ -41,6 +41,8 @@ class CardOrder
 
     public function __construct()
     {
+        $this->orderedAt = new \DateTimeImmutable();
+        $this->received = false;
         $this->cards = new ArrayCollection();
     }
 

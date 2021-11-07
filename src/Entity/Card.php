@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CardRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=CardRepository::class)
@@ -19,26 +20,31 @@ class Card
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Groups({"show_cards"})
      */
     private $type;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"show_cards"})
      */
     private $centerCode;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"show_cards"})
      */
     private $cardCode;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     * @Groups({"show_cards"})
      */
     private $activatedAt;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"show_cards"})
      */
     private $checksum;
 
@@ -123,5 +129,15 @@ class Card
         $this->cardOrder = $cardOrder;
 
         return $this;
+    }
+
+    public function calculateCheckSum(): int
+    {
+        $arrayCenterCode  = array_map('intval', str_split($this->centerCode));
+        $arrayCardCode = array_map('intval', str_split($this->cardCode));
+
+        $arraySum = array_merge($arrayCenterCode, $arrayCardCode);
+
+        return array_sum($arraySum) % 9;
     }
 }

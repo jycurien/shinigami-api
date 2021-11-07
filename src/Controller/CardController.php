@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Repository\CardRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CardController extends AbstractController
@@ -18,6 +19,7 @@ class CardController extends AbstractController
      */
     public function findLatestCreatedCards(CardRepository $cardRepository): JsonResponse
     {
-        return $this->json($cardRepository->findLatestCreatedCards());
+        $cards = $cardRepository->findLatestCreatedCards();
+        return $this->json($cards, Response::HTTP_OK, [], ['groups' => 'show_cards']);
     }
 }
