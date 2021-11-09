@@ -15,6 +15,20 @@ use Symfony\Component\Routing\Annotation\Route;
 class CardController extends AbstractController
 {
     /**
+     * Cherche une carte a partir du motif (code)
+     * @Route("/cards/code-{code<\d+>}", methods={"GET"})
+     * @param string $code
+     * @param CardRepository $cardRepository
+     * @return JsonResponse
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findCardByCode(string $code, CardRepository $cardRepository): JsonResponse
+    {
+        $card = $cardRepository->findBycode($code);
+        return $this->json($card);
+    }
+
+    /**
      * @Route("/cards", methods={"GET"})
      * @param CardRepository $cardRepository
      * @return JsonResponse
