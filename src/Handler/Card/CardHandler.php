@@ -33,7 +33,7 @@ class CardHandler
         $this->cardFactory = $cardFactory;
     }
 
-    public function handle($centerCode): Card
+    public function handle(string $centerCode): Card
     {
         // We check the max number card for the given center
         $maxCardCode = $this->cardRepository->findMaxCardCodeByCenterAndType($centerCode, 'numeric');
