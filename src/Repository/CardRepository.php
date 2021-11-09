@@ -24,6 +24,29 @@ class CardRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param $code
+     * @return Card|null
+     * @throws NonUniqueResultException
+     */
+    public function findBycode($code): ?Card
+    {
+        $centerCode = substr($code, 0, 3);
+        $cardCode = substr($code, 3, 6);
+        $checkSum = substr($code, 9);
+
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.centerCode = :centerCode')
+            ->setParameter('centerCode', $centerCode)
+            ->andWhere('c.cardCode = :cardCode')
+            ->setParameter('cardCode', $cardCode)
+            ->andWhere('c.checkSum = :checkSum')
+            ->setParameter('checkSum', $checkSum)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
+
+    /**
      * @return mixed
      */
     public function findLatestCreatedCards()

@@ -31,13 +31,25 @@ class CardController extends AbstractController
      * @param CardHandler $cardHandler
      * @return JsonResponse
      */
-    public function createCard(Request $request, CardHandler $cardHandler)
+    public function createCard(Request $request, CardHandler $cardHandler): JsonResponse
     {
         $parameters = json_decode($request->getContent());
         if (!isset($parameters->center)) {
             return $this->json(['errorMessage' => 'You must provide a center code'], Response::HTTP_BAD_REQUEST);
         }
         $card = $cardHandler->handle($parameters->center);
+        return $this->json($card, Response::HTTP_OK, [], ['groups' => 'show_cards']);
+    }
+
+    /**
+     * @Route("/cards/{code<\d+>}", methods={"PUT"})
+     * @param $code
+     * @param CardHandler $cardHandler
+     * @return JsonResponse
+     */
+    public function updateActivationDate($code, CardHandler $cardHandler): JsonResponse
+    {
+        $card = $cardHandler->updateActivationDate($code);
         return $this->json($card, Response::HTTP_OK, [], ['groups' => 'show_cards']);
     }
 }

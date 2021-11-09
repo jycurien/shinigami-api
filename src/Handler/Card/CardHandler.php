@@ -52,24 +52,22 @@ class CardHandler
         return $card;
     }
 
-//    /**
-//     * @param $code
-//     * @return Card|null
-//     */
-//    public function updateActivationDate($code)
-//    {
-//        $card = $this->manager->getRepository(Card::class)->findBycode($code);
-//
-//        // We check if the card exists and if the activation date is not already set
-//        if($card && null == $card->getActivationDate()) {
-//            $card->setActivationDate(New \DateTime());
-//            $this->manager->persist($card);
-//            $this->manager->flush();
-//        } else {
-//            // We set the card to null if it doesn't exists OR if activationDate is already set
-//            $card = null;
-//        }
-//
-//        return $card;
-//    }
+
+    public function updateActivationDate($code): ?Card
+    {
+        /** @var Card $card */
+        $card = $this->cardRepository->findBycode($code);
+
+        // We check if the card exists and if the activation date is not already set
+        if($card && null === $card->getActivatedAt()) {
+            $card->setActivatedAt(New \DateTimeImmutable());
+            $this->entityManager->persist($card);
+            $this->entityManager->flush();
+        } else {
+            // We set the card to null if it doesn't exists OR if activationDate is already set
+            $card = null;
+        }
+
+        return $card;
+    }
 }
