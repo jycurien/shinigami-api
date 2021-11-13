@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Handler\Card\CardHandler;
 use App\Repository\CardRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,12 +21,12 @@ class CardController extends AbstractController
      * @param string $code
      * @param CardRepository $cardRepository
      * @return JsonResponse
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function findCardByCode(string $code, CardRepository $cardRepository): JsonResponse
     {
         $card = $cardRepository->findBycode($code);
-        return $this->json($card);
+        return $this->json($card, Response::HTTP_OK, [], ['groups' => 'show_cards']);
     }
 
     /**
