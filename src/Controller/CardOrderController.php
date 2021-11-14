@@ -9,6 +9,7 @@ use App\Factory\Order\CardOrderFactory;
 use App\Repository\CardOrderRepository;
 use App\Repository\CardRepository;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\OptimisticLockException;
@@ -48,19 +49,17 @@ class CardOrderController extends AbstractController
 
         $order = $orderFactory->create($parameters->center, $parameters->quantity, $startCodeCard);
 
-        return $this->json($order);
+        return $this->json($order, Response::HTTP_OK, [], ['groups' => 'show_order']);
     }
 
     /**
-     * @Route("/orders/{id<\d+>}", methods={"PATCH"})
+     * @Route("/orders/{id<\d+>}", methods={"PUT"})
      * @param CardOrder $order
      * @param Request $request
-     * @param EntityManager $entityManager
+     * @param EntityManagerInterface $entityManager
      * @return JsonResponse
-     * @throws ORMException
-     * @throws OptimisticLockException
      */
-    public function receiveOrder(CardOrder $order, Request $request, EntityManager $entityManager): JsonResponse
+    public function receiveOrder(CardOrder $order, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $parameters = json_decode($request->getContent());
 
@@ -71,6 +70,6 @@ class CardOrderController extends AbstractController
         $order->setReceived(true);
         $entityManager->flush();
 
-        return $this->json($order);
+        return $this->json($order, Response::HTTP_OK, [], ['groups' => 'show_order']);
     }
 }

@@ -6,6 +6,7 @@ use App\Repository\CardOrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=CardOrderRepository::class)
@@ -16,21 +17,25 @@ class CardOrder
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"show_order"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Groups({"show_order"})
      */
     private $orderedAt;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"show_order"})
      */
     private $quantity;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"show_order"})
      */
     private $received;
 
