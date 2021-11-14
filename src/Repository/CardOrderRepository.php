@@ -19,32 +19,23 @@ class CardOrderRepository extends ServiceEntityRepository
         parent::__construct($registry, CardOrder::class);
     }
 
-    // /**
-    //  * @return CardOrder[] Returns an array of CardOrder objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findOrdersWithCenterAndCardNumbers()
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('co')
+            ->leftJoin('co.cards', 'c')
+            ->select(
+                'co.id,
+                        co.orderedAt,
+                        co.quantity,
+                        co.received,
+                        c.centerCode,
+                        MIN(c.cardCode) as minCardCode,
+                        MAX(c.cardCode) as maxCardCode')
+            ->groupBy('co.id')
+            ->distinct('co.id')
+            ->addOrderBy("co.orderedAt",  'DESC')
             ->getQuery()
             ->getResult()
-        ;
+            ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?CardOrder
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
