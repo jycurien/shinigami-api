@@ -28,7 +28,7 @@ class ApiBaseTestCase extends WebTestCase
             'password' => $password,
             'exp' => time() + 3600
         ]);
-        $headers['Authorization'] = 'Bearer '.$token;
+        $headers['HTTP_AUTHORIZATION'] = 'Bearer '.$token;
         return $headers;
     }
 }
