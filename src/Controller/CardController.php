@@ -66,6 +66,6 @@ class CardController extends AbstractController
     public function updateActivationDate($code, CardHandler $cardHandler): JsonResponse
     {
         $card = $cardHandler->updateActivationDate($code);
-        return $this->json($card, Response::HTTP_OK, [], ['groups' => 'show_cards']);
+        return $this->json($card, Response::HTTP_CREATED, [], ['groups' => 'show_cards']);
     }
 }
