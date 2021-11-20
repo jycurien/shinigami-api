@@ -52,6 +52,7 @@ class CardController extends AbstractController
         if (!isset($parameters->center)) {
             return $this->json(['errorMessage' => 'You must provide a center code'], Response::HTTP_BAD_REQUEST);
         }
+        // TODO validate correct centerCode
         $card = $cardHandler->handle($parameters->center);
         return $this->json($card, Response::HTTP_OK, [], ['groups' => 'show_cards']);
     }

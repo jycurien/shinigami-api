@@ -22,11 +22,13 @@ class CardControllerTest extends ApiBaseTestCase
         $this->client->request('GET', self::BASE_API_URI.'/cards/code-'.$correctCardNumber, [], [], $this->getAuthorizedHeaders('Shinigami', 'Laser'));
         $response = $this->client->getResponse();
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertObjectHasAttribute("type", json_decode($response->getContent()));
-        $this->assertObjectHasAttribute("centerCode", json_decode($response->getContent()));
-        $this->assertObjectHasAttribute("cardCode", json_decode($response->getContent()));
-        $this->assertObjectHasAttribute("activatedAt", json_decode($response->getContent()));
-        $this->assertObjectHasAttribute("checkSum", json_decode($response->getContent()));
+        $decodedCard = json_decode($response->getContent());
+        $this->assertObjectHasAttribute("id", $decodedCard);
+        $this->assertObjectHasAttribute("type", $decodedCard);
+        $this->assertObjectHasAttribute("centerCode", $decodedCard);
+        $this->assertObjectHasAttribute("cardCode", $decodedCard);
+        $this->assertObjectHasAttribute("activatedAt", $decodedCard);
+        $this->assertObjectHasAttribute("checkSum", $decodedCard);
 
         $wrongCardNumber = 1241000007;
         $this->client->request('GET', self::BASE_API_URI.'/cards/code-'.$wrongCardNumber, [], [], $this->getAuthorizedHeaders('Shinigami', 'Laser'));
@@ -39,5 +41,24 @@ class CardControllerTest extends ApiBaseTestCase
         $this->client->request('GET', self::BASE_API_URI.'/cards', [], [], $this->getAuthorizedHeaders('Shinigami', 'Laser'));
         $response = $this->client->getResponse();
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    public function testPOSTcreateCard()
+    {
+        $correctCenterCode = '124';
+        $body = json_encode(["center" => $correctCenterCode]);
+        $this->client->request('POST', self::BASE_API_URI.'/cards', [], [], $this->getAuthorizedHeaders('Shinigami', 'Laser'), $body);
+        $response = $this->client->getResponse();
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $decodedCard = json_decode($response->getContent());
+        $this->assertObjectHasAttribute("id", $decodedCard);
+        $this->assertObjectHasAttribute("type", $decodedCard);
+        $this->assertObjectHasAttribute("centerCode", $decodedCard);
+        $this->assertObjectHasAttribute("cardCode", $decodedCard);
+        $this->assertObjectHasAttribute("activatedAt", $decodedCard);
+        $this->assertObjectHasAttribute("checkSum", $decodedCard);
+        $this->assertEquals('numeric', $decodedCard->type);
+        $this->assertEquals('124', $decodedCard->centerCode);
+        $this->assertEquals(null, $decodedCard->activatedAt);
     }
 }
