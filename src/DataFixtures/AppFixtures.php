@@ -26,6 +26,14 @@ class AppFixtures extends Fixture
             $manager->persist($order);
         }
 
+        $actvatedCard = new Card();
+        $actvatedCard->setType('material');
+        $actvatedCard->setCenterCode(126);
+        $actvatedCard->setCardCode(100100);
+        $actvatedCard->setCheckSum($actvatedCard->calculateCheckSum());
+        $actvatedCard->setActivatedAt(new \DateTimeImmutable());
+        $manager->persist($actvatedCard);
+
         $manager->flush();
     }
 }

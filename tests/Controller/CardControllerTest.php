@@ -59,9 +59,15 @@ class CardControllerTest extends ApiBaseTestCase
         $decodedCard = $this->assertIsValidJsonCardResponse(Response::HTTP_CREATED, $response);
         $this->assertEquals((new \DateTime())->format('YY-mm-dd'), (new \DateTime($decodedCard->activatedAt))->format('YY-mm-dd'));
 
-        // TODO test already activated card
+        $alreadyActivatedCardNumber = 1261001002;
+        $this->client->request('PUT', self::BASE_API_URI.'/cards/'.$alreadyActivatedCardNumber, [], [], $this->getAuthorizedHeaders('Shinigami', 'Laser'));
+        $response = $this->client->getResponse();
+        $this->assertEquals(null, json_decode($response->getContent()));
 
-        // TODO test wrong card number
+        $wrongCardNumber = 1241000007;
+        $this->client->request('PUT', self::BASE_API_URI.'/cards/'.$wrongCardNumber, [], [], $this->getAuthorizedHeaders('Shinigami', 'Laser'));
+        $response = $this->client->getResponse();
+        $this->assertEquals(null, json_decode($response->getContent()));
     }
 
     private function assertIsValidJsonCardResponse(int $expectedHTTPCode, $response): \stdClass
