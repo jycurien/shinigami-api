@@ -53,7 +53,6 @@ class CardControllerTest extends ApiBaseTestCase
 
     public function testPUTupdateActivationDate()
     {
-        // TODO reset database before test
         $correctCardNumber = 1241000008;
         $this->client->request('PUT', self::BASE_API_URI.'/cards/'.$correctCardNumber, [], [], $this->getAuthorizedHeaders('Shinigami', 'Laser'));
         $response = $this->client->getResponse();
