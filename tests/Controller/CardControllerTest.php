@@ -22,13 +22,7 @@ class CardControllerTest extends ApiBaseTestCase
         $this->client->request('GET', self::BASE_API_URI.'/cards/code-'.$correctCardNumber, [], [], $this->getAuthorizedHeaders('Shinigami', 'Laser'));
         $response = $this->client->getResponse();
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $decodedCard = json_decode($response->getContent());
-        $this->assertObjectHasAttribute("id", $decodedCard);
-        $this->assertObjectHasAttribute("type", $decodedCard);
-        $this->assertObjectHasAttribute("centerCode", $decodedCard);
-        $this->assertObjectHasAttribute("cardCode", $decodedCard);
-        $this->assertObjectHasAttribute("activatedAt", $decodedCard);
-        $this->assertObjectHasAttribute("checkSum", $decodedCard);
+        $decodedCard = $this->assertIsValidJsonCardResponse($response);
 
         $wrongCardNumber = 1241000007;
         $this->client->request('GET', self::BASE_API_URI.'/cards/code-'.$wrongCardNumber, [], [], $this->getAuthorizedHeaders('Shinigami', 'Laser'));
@@ -49,6 +43,16 @@ class CardControllerTest extends ApiBaseTestCase
         $body = json_encode(["center" => $correctCenterCode]);
         $this->client->request('POST', self::BASE_API_URI.'/cards', [], [], $this->getAuthorizedHeaders('Shinigami', 'Laser'), $body);
         $response = $this->client->getResponse();
+        $decodedCard = $this->assertIsValidJsonCardResponse($response);
+        $this->assertEquals('numeric', $decodedCard->type);
+        $this->assertEquals('124', $decodedCard->centerCode);
+        $this->assertEquals(null, $decodedCard->activatedAt);
+
+        // TODO test wrong center code
+    }
+
+    private function assertIsValidJsonCardResponse($response): \stdClass
+    {
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $decodedCard = json_decode($response->getContent());
         $this->assertObjectHasAttribute("id", $decodedCard);
@@ -57,8 +61,7 @@ class CardControllerTest extends ApiBaseTestCase
         $this->assertObjectHasAttribute("cardCode", $decodedCard);
         $this->assertObjectHasAttribute("activatedAt", $decodedCard);
         $this->assertObjectHasAttribute("checkSum", $decodedCard);
-        $this->assertEquals('numeric', $decodedCard->type);
-        $this->assertEquals('124', $decodedCard->centerCode);
-        $this->assertEquals(null, $decodedCard->activatedAt);
+
+        return $decodedCard;
     }
 }
