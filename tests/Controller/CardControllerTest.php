@@ -1,6 +1,6 @@
 <?php
 
-
+// php -dxdebug.mode=coverage bin/phpunit --coverage-html ./var/tests
 namespace App\Tests\Controller;
 
 
@@ -47,6 +47,11 @@ class CardControllerTest extends ApiBaseTestCase
         $this->assertEquals('numeric', $decodedCard->type);
         $this->assertEquals('124', $decodedCard->centerCode);
         $this->assertEquals(null, $decodedCard->activatedAt);
+
+        // TODO test no center code
+        $this->client->request('POST', self::BASE_API_URI.'/cards', [], [], $this->getAuthorizedHeaders('Shinigami', 'Laser'));
+        $response = $this->client->getResponse();
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
 
         // TODO test wrong center code
     }
