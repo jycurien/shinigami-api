@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CardOrderControllerTest extends ApiBaseTestCase
 {
-    public function testGETordersWithCenterAndCardNumbers()
+    public function testGETOrdersWithCenterAndCardNumbers()
     {
         $this->client->request('GET', self::BASE_API_URI.'/orders', [], [], $this->getAuthorizedHeaders('Shinigami', 'Laser'));
         $response = $this->client->getResponse();

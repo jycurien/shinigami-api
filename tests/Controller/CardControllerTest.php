@@ -16,7 +16,7 @@ class CardControllerTest extends ApiBaseTestCase
         $this->client->request('GET', self::BASE_API_URI.'/cards');
     }
 
-    public function testGETfindCardByCode()
+    public function testGETFindCardByCode()
     {
         $correctCardNumber = 1241000008;
         $this->client->request('GET', self::BASE_API_URI.'/cards/code-'.$correctCardNumber, [], [], $this->getAuthorizedHeaders('Shinigami', 'Laser'));
@@ -37,7 +37,7 @@ class CardControllerTest extends ApiBaseTestCase
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
     }
 
-    public function testPOSTcreateCard()
+    public function testPOSTCreateCard()
     {
         $correctCenterCode = 124;
         $body = json_encode(["center" => $correctCenterCode]);
@@ -56,7 +56,7 @@ class CardControllerTest extends ApiBaseTestCase
         // TODO test wrong center code
     }
 
-    public function testPUTupdateActivationDate()
+    public function testPUTUpdateActivationDate()
     {
         $correctCardNumber = 1241000008;
         $this->client->request('PUT', self::BASE_API_URI.'/cards/'.$correctCardNumber, [], [], $this->getAuthorizedHeaders('Shinigami', 'Laser'));
